@@ -12,23 +12,23 @@ body()
         IMAGE_TAG = 'latest'                                              // Replace with your desired image tag
         platform = 'getPlatformName'
     }
-      stages {
+   /*   stages {
         stage('Get Platform Name') {
             steps {
                 script {
                     // Ensure getPlatformName is called as a function
                     def platform = org.example.utilities.PlatformUtil.getPlatformName()
-                    //echo "Platform: ${platform}"
+                    echo "Platform: ${platform}"
                 }
             }
         }
     }
-}
+*/ }
     stages {
         stage('Build Docker Image from shared libraary') {
             steps {
                 script {
-                        sh 'echo "${env.paltform}"'
+                        // sh 'echo "${env.paltform}"'
                     // Define the Docker image name and tag
                     def dockerImage = "${env.DOCKER_HUB_REPO}:${env.IMAGE_TAG}"
                     
