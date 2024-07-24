@@ -1,5 +1,10 @@
-pipeline {
-    agent any
+def call(body) {
+def config = [:]
+body.resolveStrategy = Closure.DELEGATE_FIRST
+body.delegate = config
+body()
+        pipeline {
+        agent any
     
     environment {
         DOCKER_HUB_CREDENTIALS = credentials('rajanikantlugade999_docker_hub') // Replace with your credentials ID
@@ -19,7 +24,7 @@ pipeline {
                 }
             }
         }
-        
+    }
         stage('Login to Docker Hub from shared libraary') {
             steps {
                 script {
