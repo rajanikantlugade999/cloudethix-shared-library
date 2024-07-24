@@ -10,12 +10,14 @@ body()
         DOCKER_HUB_CREDENTIALS = credentials('rajanikantlugade999_docker_hub') // Replace with your credentials ID
         DOCKER_HUB_REPO = 'rajanikantlugade999/cloudethix-nginix-rajani'       // Replace with your Docker Hub repository
         IMAGE_TAG = 'latest'                                              // Replace with your desired image tag
+        platform = getPlatformName
     }
     
     stages {
         stage('Build Docker Image from shared libraary') {
             steps {
                 script {
+                        sh 'echo "${env.paltform}"'
                     // Define the Docker image name and tag
                     def dockerImage = "${env.DOCKER_HUB_REPO}:${env.IMAGE_TAG}"
                     
@@ -54,3 +56,7 @@ body()
         }
     }
 }
+def getPlatformName() {
+    return config.platform
+}
+
