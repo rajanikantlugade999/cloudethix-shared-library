@@ -10,7 +10,7 @@ body()
         DOCKER_HUB_CREDENTIALS = credentials('rajanikantlugade999_docker_hub') // Replace with your credentials ID
         DOCKER_HUB_REPO = 'rajanikantlugade999/cloudethix-nginix-rajani'       // Replace with your Docker Hub repository
         IMAGE_TAG = 'latest'                                              // Replace with your desired image tag
-        platform = 'getPlatformName'
+        //platform = 'getPlatformName'
     }
    /*   stages {
         stage('Get Platform Name') {
