@@ -18,7 +18,7 @@ body()
                 script {
                     // Ensure getPlatformName is called as a function
                     def platform = org.example.utilities.PlatformUtil.getPlatformName()
-                    echo "Platform: ${platform}"
+                    //echo "Platform: ${platform}"
                 }
             }
         }
