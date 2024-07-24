@@ -66,7 +66,6 @@ body()
             sh 'docker logout'
         }
     }
-}
 def getPlatformName() {
     return config.platform
 }
