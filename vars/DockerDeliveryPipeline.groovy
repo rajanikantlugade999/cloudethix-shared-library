@@ -3,69 +3,41 @@ def call(body) {
     body.resolveStrategy = Closure.DELEGATE_FIRST
     body.delegate = config
     body()
-        pipeline {
+    pipeline {
         agent any
-            environment {
-        DOCKER_HUB_CREDENTIALS = credentials('rajanikantlugade999_docker_hub') // Replace with your credentials ID
-        DOCKER_HUB_REPO = 'rajanikantlugade999/cloudethix-nginix-rajani'       // Replace with your Docker Hub repository
-        IMAGE_TAG = 'latest'                                              // Replace with your desired image tag
-        //platform = 'getPlatformName'
-    }
-   /*   stages {
-        stage('Get Platform Name') {
-            steps {
-                script {
-                    // Ensure getPlatformName is called as a function
-                    def platform = org.example.utilities.PlatformUtil.getPlatformName()
-                    echo "Platform: ${platform}"
+        environment {
+            registryURI = 'https://registry.hub.docker.com/'
+            registry = 'teamcloudethix/cloudethix-sample-nginx'
+            registryCredential = '02_docker_hub_creds'
+        //platform = getPlatformName()
+        }
+        stages {
+            stage('Building image from project dir from shared Lib') {
+                environment {
+                    registry_endpoint = "${env.registryURI}" + "${env.registry}"
+                    tag_commit_id     = "${env.registry}" + ":$GIT_COMMIT"
+                }
+                steps {
+                    script {
+                        //sh 'echo "${env.platform}"'
+                        def app = docker.build(tag_commit_id)
+                        docker.withRegistry( registry_endpoint, registryCredential ) {
+                            app.push()
+                        }
+                    }
+                }
+            }
+            stage('Remove Unused docker image from shared Lib') {
+                steps {
+                    sh "docker rmi $registry:$GIT_COMMIT"
                 }
             }
         }
-    }
-*/ }
-    stages {
-        stage('Build Docker Image from shared libraary') {
-            steps {
-                script {
-                        // sh 'echo "${env.paltform}"'
-                    // Define the Docker image name and tag
-                    def dockerImage = "${env.DOCKER_HUB_REPO}:${env.IMAGE_TAG}"
-                    
-                    // Build the Docker image
-                    sh "docker build -t ${dockerImage} ."
-                }
+        post {
+            always {
+                echo 'Deleting Workspace from shared Lib'
+                deleteDir() /* clean up our workspace */
             }
         }
     }
-        stage('Login to Docker Hub from shared libraary') {
-            steps {
-                script {
-                    // Log in to Docker Hub
-                    sh "echo ${DOCKER_HUB_CREDENTIALS_PSW} | docker login -u ${DOCKER_HUB_CREDENTIALS_USR} --password-stdin"
-                }
-            }
-        }
-        
-        stage('Push Docker Image from shared libraary') {
-            steps {
-                script {
-                    // Define the Docker image name and tag
-                    def dockerImage = "${env.DOCKER_HUB_REPO}:${env.IMAGE_TAG}"
-                    
-                    // Push the Docker image to Docker Hub
-                    sh "docker push ${dockerImage}"
-                }
-            }
-        }
-    }
-    
-    post {
-        always {
-            // Clean up the Docker environment from shared libraary
-            sh 'docker logout'
-        }
-    }
-def getPlatformName() {
-    return config.platform
 }
-
