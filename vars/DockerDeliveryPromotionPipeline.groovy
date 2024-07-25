@@ -7,6 +7,7 @@ def call(body) {
         agent any
         environment {
             registryURI         = 'registry.hub.docker.com/'
+            
             dev_registry        = 'rajanikantlugade999/cloudethix-sample-nginx-dev'
             qa_registry         = 'rajanikantlugade999/cloudethix-sample-nginx-qa'
             stage_registry      = 'rajanikantlugade999/cloudethix-sample-nginx-stage'
